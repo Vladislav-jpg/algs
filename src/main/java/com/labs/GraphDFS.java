@@ -3,11 +3,12 @@ package com.labs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 public class GraphDFS {
 
     public static void main(String[] args) {
-        // Матрица смежности для графа из задания
+        // Матрица смежности
         int[][] adjacencyMatrix = {
                 {0, 0, 0, 0, 0, 1, 0, 0, 1, 0}, // 0
                 {0, 0, 1, 1, 0, 1, 1, 1, 0, 0}, // 1
@@ -21,7 +22,7 @@ public class GraphDFS {
                 {0, 0, 0, 0, 1, 1, 0, 0, 0, 0}  // 9
         };
 
-        // Вызов обхода в глубину (DFS) начиная с вершины 0
+        // DFS с вершины 0
         int startNode = 0;
         int[] dfsResult = dfs(adjacencyMatrix, startNode);
 
@@ -30,18 +31,39 @@ public class GraphDFS {
     }
 
     /**
-     * Основной метод для запуска DFS.
+     * Итеративный метод для запуска DFS с использованием Stack.
      * Возвращает массив с номерами вершин в порядке обхода.
      */
     public static int[] dfs(int[][] matrix, int startNode) {
         int n = matrix.length;
         boolean[] visited = new boolean[n];
         List<Integer> path = new ArrayList<>();
+        Stack<Integer> stack = new Stack<>();
 
-        // Запускаем рекурсивный обход
-        dfsRecursive(matrix, startNode, visited, path);
+        // стартовую вершину в стек
+        stack.push(startNode);
 
-        // Преобразуем список в массив
+        while (!stack.isEmpty()) {
+            // берем верхнюю вершину из стека
+            int currentNode = stack.pop();
+
+            // Проверка были ли в вершине
+            if (!visited[currentNode]) {
+                visited[currentNode] = true;
+                path.add(currentNode);
+
+                // Добавляем соседей в стек в ОБРАТНОМ порядке.
+                // Стек работает по принципу LIFO (последним пришел - первым ушел).
+                // Чтобы первым обработался сосед с меньшим индексом, он должен попасть в стек последним.
+                for (int neighbor = n - 1; neighbor >= 0; neighbor--) {
+                    if (matrix[currentNode][neighbor] == 1 && !visited[neighbor]) {
+                        stack.push(neighbor);
+                    }
+                }
+            }
+        }
+
+        // Перевод списка в массив
         int[] resultArray = new int[path.size()];
         for (int i = 0; i < path.size(); i++) {
             resultArray[i] = path.get(i);
@@ -49,23 +71,4 @@ public class GraphDFS {
 
         return resultArray;
     }
-
-    /**
-     * Вспомогательный рекурсивный метод для обхода в глубину
-     */
-    private static void dfsRecursive(int[][] matrix, int currentNode, boolean[] visited, List<Integer> path) {
-        // Отмечаем текущую вершину как посещенную и добавляем в путь
-        visited[currentNode] = true;
-        path.add(currentNode);
-
-        // Проверяем всех соседей текущей вершины
-        for (int neighbor = 0; neighbor < matrix.length; neighbor++) {
-            // Если есть ребро и сосед еще не посещен, идем в него
-            if (matrix[currentNode][neighbor] == 1 && !visited[neighbor]) {
-                dfsRecursive(matrix, neighbor, visited, path);
-            }
-        }
-    }
-
-
 }

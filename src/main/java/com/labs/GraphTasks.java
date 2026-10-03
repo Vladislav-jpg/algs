@@ -9,7 +9,7 @@ import java.util.Queue;
 public class GraphTasks {
 
     public static void main(String[] args) {
-        // Матрица смежности для графа из задания
+        // Матрица смежности
         int[][] adjacencyMatrix = {
                 {0, 0, 0, 0, 0, 1, 0, 0, 1, 0}, // 0
                 {0, 0, 1, 1, 0, 1, 1, 1, 0, 0}, // 1
@@ -42,7 +42,7 @@ public class GraphTasks {
     }
 
     /**
-     * Функция для наглядного вывода матрицы смежности
+     * Функция вывода матрицы смежности
      */
     public static void printMatrix(int[][] matrix) {
         System.out.println("Матрица смежности:");
@@ -65,7 +65,7 @@ public class GraphTasks {
     }
 
     /**
-     * Функция, подсчитывающая число степеней и число рёбер графа
+     * Функция подсчитывающая число степеней и число рёбер графа
      */
     public static void calculateDegreesAndEdges(int[][] matrix) {
         int n = matrix.length;
@@ -92,7 +92,6 @@ public class GraphTasks {
 
     /**
      * Программа обхода в ширину (BFS)
-     * В результате формируется массив, содержащий номера вершин BFS-пути.
      */
     public static int[] bfs(int[][] matrix, int startNode) {
         int n = matrix.length;
@@ -100,7 +99,7 @@ public class GraphTasks {
         Queue<Integer> queue = new LinkedList<>();
         List<Integer> path = new ArrayList<>();
 
-        // Начинаем с заданной стартовой вершины
+        // начало стартовой вершины
         visited[startNode] = true;
         queue.add(startNode);
 
@@ -108,16 +107,16 @@ public class GraphTasks {
             int currentNode = queue.poll();
             path.add(currentNode); // Добавляем вершину в путь обхода
 
-            // Проверяем всех соседей текущей вершины
+            // проверка всех соседей текущей вершины
             for (int neighbor = 0; neighbor < n; neighbor++) {
                 if (matrix[currentNode][neighbor] == 1 && !visited[neighbor]) {
-                    visited[neighbor] = true; // Отмечаем как посещенную
+                    visited[neighbor] = true; // посещенные
                     queue.add(neighbor);      // Добавляем в очередь
                 }
             }
         }
 
-        // Преобразуем полученный список (List) в требуемый массив (int[])
+        // в массив
         int[] resultArray = new int[path.size()];
         for (int i = 0; i < path.size(); i++) {
             resultArray[i] = path.get(i);
