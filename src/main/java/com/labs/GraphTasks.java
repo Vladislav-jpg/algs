@@ -1,15 +1,10 @@
 package com.labs;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class GraphTasks {
 
     public static void main(String[] args) {
-        // Матрица смежности
         int[][] adjacencyMatrix = {
                 {0, 0, 0, 0, 0, 1, 0, 0, 1, 0}, // 0
                 {0, 0, 1, 1, 0, 1, 1, 1, 0, 0}, // 1
@@ -23,50 +18,25 @@ public class GraphTasks {
                 {0, 0, 0, 0, 1, 1, 0, 0, 0, 0}  // 9
         };
 
-        // 1. Вывод матрицы смежности
-        printMatrix(adjacencyMatrix);
-
         System.out.println("-------------------------------------------------");
 
-        // 2. Вызов функции подсчета степеней и ребер
         calculateDegreesAndEdges(adjacencyMatrix);
 
         System.out.println("-------------------------------------------------");
 
-        // 3. Вызов обхода в ширину (BFS) начиная с вершины 0
         int startNode = 0;
         int[] bfsResult = bfs(adjacencyMatrix, startNode);
 
         System.out.println("Массив, содержащий номера вершин BFS-пути от вершины " + startNode + ":");
         System.out.println(Arrays.toString(bfsResult));
+
+        int[] dfsResult = dfs(adjacencyMatrix, startNode);
+
+        System.out.println("Массив, содержащий номера вершин DFS-пути от вершины " + startNode + ":");
+        System.out.println(Arrays.toString(dfsResult));
     }
 
-    /**
-     * Функция вывода матрицы смежности
-     */
-    public static void printMatrix(int[][] matrix) {
-        System.out.println("Матрица смежности:");
 
-        // Вывод номеров столбцов (вершин)
-        System.out.print("   ");
-        for (int i = 0; i < matrix.length; i++) {
-            System.out.print(i + " ");
-        }
-        System.out.println("\n  --------------------");
-
-        // Вывод строк матрицы с номерами вершин
-        for (int i = 0; i < matrix.length; i++) {
-            System.out.print(i + "| ");
-            for (int j = 0; j < matrix[i].length; j++) {
-                System.out.print(matrix[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    /**
-     * Функция подсчитывающая число степеней и число рёбер графа
-     */
     public static void calculateDegreesAndEdges(int[][] matrix) {
         int n = matrix.length;
         int sumOfDegrees = 0;
@@ -74,7 +44,6 @@ public class GraphTasks {
         System.out.println("Степени вершин:");
         for (int i = 0; i < n; i++) {
             int degree = 0;
-            // Считаем количество единиц в строке для получения степени вершины
             for (int j = 0; j < n; j++) {
                 if (matrix[i][j] == 1) {
                     degree++;
@@ -84,39 +53,32 @@ public class GraphTasks {
             sumOfDegrees += degree;
         }
 
-        // В неориентированном графе количество ребер равно половине суммы степеней всех вершин (Лемма о рукопожатиях)
         System.out.println("Общая сумма степеней вершин: " + sumOfDegrees);
         int edgesCount = sumOfDegrees / 2;
         System.out.println("Общее число рёбер в графе: " + edgesCount);
     }
 
-    /**
-     * Программа обхода в ширину (BFS)
-     */
     public static int[] bfs(int[][] matrix, int startNode) {
         int n = matrix.length;
         boolean[] visited = new boolean[n];
         Queue<Integer> queue = new LinkedList<>();
         List<Integer> path = new ArrayList<>();
 
-        // начало стартовой вершины
         visited[startNode] = true;
         queue.add(startNode);
 
         while (!queue.isEmpty()) {
             int currentNode = queue.poll();
-            path.add(currentNode); // Добавляем вершину в путь обхода
+            path.add(currentNode);
 
-            // проверка всех соседей текущей вершины
             for (int neighbor = 0; neighbor < n; neighbor++) {
                 if (matrix[currentNode][neighbor] == 1 && !visited[neighbor]) {
-                    visited[neighbor] = true; // посещенные
-                    queue.add(neighbor);      // Добавляем в очередь
+                    visited[neighbor] = true;
+                    queue.add(neighbor);
                 }
             }
         }
 
-        // в массив
         int[] resultArray = new int[path.size()];
         for (int i = 0; i < path.size(); i++) {
             resultArray[i] = path.get(i);
@@ -124,4 +86,42 @@ public class GraphTasks {
 
         return resultArray;
     }
+
+    public static int[] dfs(int[][] matrix, int startNode) {
+        int n = matrix.length;
+        boolean[] visited = new boolean[n];
+        Stack<Integer> stack = new Stack<>();
+        List<Integer> path = new ArrayList<>();
+
+        //visited[startNode] = true;
+        stack.push(startNode);
+
+        while (!stack.isEmpty()) {
+            int currentNode = stack.pop();
+
+            if (!visited[currentNode]) {
+                visited[currentNode] = true;
+                path.add(currentNode);
+                for (int neighbor = n - 1 ; neighbor >= 0; neighbor --) {
+                    if (matrix[currentNode][neighbor] == 1 && !visited[neighbor]) {
+                        stack.push(neighbor);
+                    }
+                }
+            }
+
+
+        }
+
+        int[] resultArray = new int[path.size()];
+        for (int i = 0; i < path.size(); i++) {
+            resultArray[i] = path.get(i);
+        }
+
+        return resultArray;
+    }
+
+    
+    
+    
+    
 }
