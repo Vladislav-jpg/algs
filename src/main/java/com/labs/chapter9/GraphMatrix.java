@@ -12,9 +12,9 @@ public class GraphMatrix {
                 {1, 0, 1, 0}
         };
 
-        System.out.println("1. Наличие пути (0 -> 2): " + hasSimplePath(graph, 0, 2));
+        System.out.println("1. Наличие пути (0-2): " + hasSimplePath(graph, 0, 2));
 
-        System.out.println("2. Вершины пути (0 -> 2): " + findSimplePath(graph, 0, 2));
+        System.out.println("2. Вершины пути (0-2): " + findSimplePath(graph, 0, 2));
 
         System.out.println("3. Наличие эйлерова цикла: " + hasEulerianCycle(graph));
 
@@ -77,8 +77,7 @@ public class GraphMatrix {
                     if (matrix[currentNode][neighbor] == 1 && !visited[neighbor]) {
                         stack.push(neighbor);
 
-                        // Записываем, что в соседа мы пришли из currentNode
-                        // Делаем это только если у соседа еще нет родителя
+                        // Записываем что в соседа мы пришли из currentNode это только если у соседа еще нет родителя
                         if (parent[neighbor] == -1) {
                             parent[neighbor] = currentNode;
                         }
@@ -126,7 +125,8 @@ public class GraphMatrix {
                 stack.push(nextVertex);
                 graphCopy[currentVertex][nextVertex]--;
                 graphCopy[nextVertex][currentVertex]--;
-            } else {
+            }
+            else {
                 cycle.add(stack.pop());
             }
         }

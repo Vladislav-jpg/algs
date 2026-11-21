@@ -27,12 +27,12 @@ public class GraphTasks {
         int startNode = 0;
         int[] bfsResult = bfs(adjacencyMatrix, startNode);
 
-        System.out.println("Массив, содержащий номера вершин BFS-пути от вершины " + startNode + ":");
+        System.out.println("Массив содержащий номера вершин BFS-пути от вершины " + startNode + ":");
         System.out.println(Arrays.toString(bfsResult));
 
         int[] dfsResult = dfs(adjacencyMatrix, startNode);
 
-        System.out.println("Массив, содержащий номера вершин DFS-пути от вершины " + startNode + ":");
+        System.out.println("Массив содержащий номера вершин DFS-пути от вершины " + startNode + ":");
         System.out.println(Arrays.toString(dfsResult));
     }
 
